@@ -1,0 +1,27 @@
+{
+  "name": "git-puller",
+  "version": "1.0.0",
+  "description": "This application can pull from a GitHub Repo on request, WebHook trigger or timer-event",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 8
+    },
+    "env": {
+      "node": true
+    },
+    "extends": "eslint:recommended"
+  },
+  "keywords": [
+    "git",
+    "pull"
+  ],
+  "author": "Lucas Jellema",
+  "license": "ISC",
+  "dependencies": {
+    "shelljs": "^0.8.2"
+  }
+}
