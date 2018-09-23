@@ -7,6 +7,9 @@ To build the container image:
 
 docker build -t "ojet-run-live-reload:0.1" .
 
+docker tag ojet-run-live-reload:0.1 lucasjellema/ojet-run-live-reload:0.1
+docker push lucasjellema/ojet-run-live-reload:0.1
+
 Run with image in local registry:
 
 docker run --name jet-app -p 3006:3000 -p 4510:4500  -e GITHUB_URL=https://github.com/lucasjellema/webshop-portal-soaring-through-the-cloud-native-sequel -e APPLICATION_ROOT_DIRECTORY= -d ojet-run-live-reload:0.1
@@ -25,6 +28,8 @@ and to reload:
 http://192.168.188.112:4510/reload
 
 
+To peek inside the container:
+
 docker exec -it jet-app /bin/bash
 
 
@@ -37,3 +42,6 @@ docker run --name jet-app -p 3008:3000 -p 4515:4500  -e GITHUB_URL=https://githu
 And access the JET application at:
 http://192.168.188.112:3008/
 
+
+Note:
+Image lucasjellema/ojet-run-live-reload:0.1 was created using Oracle JET 5.2.0. When the image is built again, the latest available version of Oracle JET is installed. 
