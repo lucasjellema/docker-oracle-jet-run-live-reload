@@ -15,19 +15,20 @@ if [ ! -e $CONTAINER_ALREADY_STARTED ]; then
     npm install
     #build the deployable JET application from the sources
     ojet build
+    #copy built JET application to /tmp/jet-on-node/public
+    cp -a ./web/. /tmp/jet-on-node/public
     #start  both the reload app (in the background) and (using nodemon) the actual Node app
     cd /tmp/reloader
     echo "starting reload app and nodemon"
-    (echo "start reload";npm start; echo "reload app finished") & 
-    cd /tmp/jet-on-node; 
+    (echo "start reload";npm start; echo "reload app finished") &
+    cd /tmp/jet-on-node;
     echo "starting nodemon for JET app copied to /tmp/jet-on-node/public";
-    nodemon
+    nodemon --delay 2.5 --watch public
 else
     echo "-- Not first container startup --"
     cd /tmp/reloader
     (echo "start reload";npm start; echo "reload app finished") &
-    cd /tmp/jet-on-node; 
+    cd /tmp/jet-on-node;
     echo "starting nodemon for JET app copied to /tmp/jet-on-node/public";
-    nodemon
+    nodemon --delay 2.5 --watch public
 fi
-
