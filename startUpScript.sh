@@ -17,6 +17,8 @@ if [ ! -e $CONTAINER_ALREADY_STARTED ]; then
     ojet build
     #copy built JET application to /tmp/jet-on-node/public
     cp -a ./web/. /tmp/jet-on-node/public
+    #copy files in ./web/jet-on-node to /tmp/jet-on-node to extend server side JET handling
+    cp -a ./web/jet-on-node/. /tmp/jet-on-node
     #start  both the reload app (in the background) and (using nodemon) the actual Node app
     cd /tmp/reloader
     echo "starting reload app and nodemon"

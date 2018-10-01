@@ -12,7 +12,7 @@ const request = require('request');
 
 var app = express();
 
-var APP_VERSION = "0.0.9";
+var APP_VERSION = "0.0.10";
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -39,6 +39,12 @@ app.get('/about', function (req, res) {
   res.json(about);
 })
 
+if (process.env.CUSTOM_NODE_MODULE) {
+  console.log("Loading Custom Module "+'./'+process.env.CUSTOM_NODE_MODULE)
+  var customModule = require('./'+process.env.CUSTOM_NODE_MODULE);
+  customModule.init(app)
+}
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
@@ -59,7 +65,6 @@ app.use(function (err, req, res, next) {
     error: err
   });
 });
-
 
 
 module.exports = app;
