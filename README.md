@@ -60,7 +60,7 @@ This container allows JET applications to influence the server side action of th
 Any files in the src/jet-on-node directory in the JET application are copied to /tmp/jet-on-node - where the app module lives that handles resource requests.
 
 The environment variable CUSTOM_NODE_MODULE can be set with the name of a file in this directory that should be loaded by app during startup. If the file indicated by CUSTOM_NODE_MODULE exists, the module is loaded. A call is made to the init function on the custom module and the app module instance is passed as a parameter. This allows the custom module for example to create additional request handlers:
-
+```
 exports.init = function (app) {
   console.log(`Custom Module (version ${APP_VERSION}) has been loaded and is initializing`)
 
@@ -73,6 +73,7 @@ exports.init = function (app) {
     res.json(about);
   })
 }
+```
 
 Note: at this point there is no mechanism to influence the package.json of the Node application.
 
@@ -82,7 +83,7 @@ JET WebComponents
 JET WebComponent (fka JET Composite Components) can be loaded from a live endpoint (instead of static resources included in the container from the GitHub repo for the JET application) or can be refreshed from a specific GITHUB repo on demand or through a GitHub WebHook trigger.
 
 The JETWebComponentLoader module takes care of all that. The basis for the actions taken by this module is the /js/jet-composites/jet-composites.json file in your JET Application. This file looks like this - specifying JET Web Components with their name (reflected in the directory name in your JET Application under /js/jet-composites/ ), the GIT HUB source repo (and a specific component path if it deviates from src/js/jet-composites/<name of web component>) and possibly the live endpoint (the URL where the JET Web Component should be retrieved from):
-
+```
 [
     {
         "name": "demo-zoo",
@@ -116,3 +117,4 @@ The JETWebComponentLoader module takes care of all that. The basis for the actio
         "annotation" : "this JET WebComponent is not used from the sources bundled in the JET application but instead retrieved at runtime from the live-endpoint. If that endpoint is not accessible, the component will not load. Note: here is a way to mash up the UIs from various microservices at run time"
     }
 ]
+```
