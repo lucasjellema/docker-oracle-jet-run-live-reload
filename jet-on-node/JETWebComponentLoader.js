@@ -48,7 +48,7 @@ JETWebComponentLoader.init = function (app) {
       }
     })
     const GITHUB_WEBHOOK_PATH = '/github/push'
-    app.post("GITHUB_WEBHOOK_PATH", getHandleGitHubWebHookTrigger())
+    app.post(GITHUB_WEBHOOK_PATH, getHandleGitHubWebHookTrigger())
 
 
     // create GitHub authentication token
