@@ -5,19 +5,19 @@ Upon changes, a live reload of the application can be performed - either by expl
 
 To build the container image:
 
-docker build -t "ojet-run-live-reload:0.2" .
+docker build -t "ojet-run-live-reload:0.3" .
 
-docker tag ojet-run-live-reload:0.2 lucasjellema/ojet-run-live-reload:0.2
-docker push lucasjellema/ojet-run-live-reload:0.2
+docker tag ojet-run-live-reload:0.3 lucasjellema/ojet-run-live-reload:0.3
+docker push lucasjellema/ojet-run-live-reload:0.3
 
 Run with image in local registry:
 
-docker run --name jet-app -p 3006:3000 -p 4510:4500  -e GITHUB_URL=https://github.com/lucasjellema/webshop-portal-soaring-through-the-cloud-native-sequel -e APPLICATION_ROOT_DIRECTORY=  -e CUSTOM_NODE_MODULE=appcustom -d ojet-run-live-reload:0.2
+docker run --name jet-app -p 3006:3000 -p 4510:4500  -e GITHUB_URL=https://github.com/lucasjellema/webshop-portal-soaring-through-the-cloud-native-sequel -e APPLICATION_ROOT_DIRECTORY=  -e CUSTOM_NODE_MODULE=appcustom -d ojet-run-live-reload:0.3
 
 
 After pushing the image to Docker Hub
 
-docker run --name jet-app -p 3006:3000 -p 4510:4500  -e GITHUB_URL=https://github.com/lucasjellema/webshop-portal-soaring-through-the-cloud-native-sequel -e APPLICATION_ROOT_DIRECTORY= -d lucasjellema/ojet-run-live-reload:0.2
+docker run --name jet-app -p 3006:3000 -p 4510:4500  -e GITHUB_URL=https://github.com/lucasjellema/webshop-portal-soaring-through-the-cloud-native-sequel -e APPLICATION_ROOT_DIRECTORY= -d lucasjellema/ojet-run-live-reload:0.3
 
 
 docker logs jet-app --follow
@@ -49,7 +49,7 @@ Image lucasjellema/ojet-run-live-reload:0.1 was created using Oracle JET 5.2.0. 
 
 https://github.com/gregja/ojetdiscovery
 
-docker run --name jet-app -p 3008:3000 -p 4515:4500  -e GITHUB_URL=https://github.com/gregja/ojetdiscovery -e APPLICATION_ROOT_DIRECTORY= -d lucasjellema/ojet-run-live-reload:0.1
+docker run --name jet-app -p 3008:3000 -p 4515:4500  -e GITHUB_URL=https://github.com/gregja/ojetdiscovery -e APPLICATION_ROOT_DIRECTORY= -d lucasjellema/ojet-run-live-reload:0.3
 
 
 
@@ -75,3 +75,44 @@ exports.init = function (app) {
 }
 
 Note: at this point there is no mechanism to influence the package.json of the Node application.
+
+
+JET WebComponents
+=================
+JET WebComponent (fka JET Composite Components) can be loaded from a live endpoint (instead of static resources included in the container from the GitHub repo for the JET application) or can be refreshed from a specific GITHUB repo on demand or through a GitHub WebHook trigger.
+
+The JETWebComponentLoader module takes care of all that. The basis for the actions taken by this module is the /js/jet-composites/jet-composites.json file in your JET Application. This file looks like this - specifying JET Web Components with their name (reflected in the directory name in your JET Application under /js/jet-composites/ ), the GIT HUB source repo (and a specific component path if it deviates from src/js/jet-composites/<name of web component>) and possibly the live endpoint (the URL where the JET Web Component should be retrieved from):
+
+[
+    {
+        "name": "demo-zoo",
+        "github": {
+            "owner": "lucasjellema",
+            "repo": "jet-composite-component-showroom",
+            "branch": "master"
+        },
+        "phase": "design",
+        "documentation": "http://www.oracle.com/webfolder/technetwork/jet/jetCookbook.html?component=composite&demo=arrays"
+    },
+    {
+        "name": "cards",
+        "github": {
+            "owner": "lucasjellema",
+            "repo": "jet-composite-component-showroom",
+            "branch": "master",
+            "componentPath": "src/js/jet-composites/demo-card"
+        },
+        "phase": "design",
+        "documentation": "https://www.oracle.com/webfolder/technetwork/jet/jetCookbook.html?component=composite&demo=basic"
+    },
+    {
+        "name": "input-country",
+        "github": {
+            "owner": "lucasjellema",
+            "repo": "jet-composite-component-showroom"
+        },
+        "phase": "run",
+        "live-endpoint": "http://127.0.0.1:3100/jet-composites/input-country",
+        "annotation" : "this JET WebComponent is not used from the sources bundled in the JET application but instead retrieved at runtime from the live-endpoint. If that endpoint is not accessible, the component will not load. Note: here is a way to mash up the UIs from various microservices at run time"
+    }
+]

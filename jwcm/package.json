@@ -1,0 +1,22 @@
+{
+  "name": "jet-web-component-manager",
+  "version": "1.0.1",
+  "description": "An Oracle JavaScript Extension Toolkit(JET) web app that consumes multiple JET Web Components - at design, deploy, run and request time",
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 8
+    },
+    "env": {
+      "node": true
+    },
+    "extends": "eslint:recommended"
+  },
+  "dependencies": {
+    "@octokit/rest": "^15.2.4",
+    "shelljs": "^0.8.2"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "private": true
+}

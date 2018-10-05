@@ -12,7 +12,7 @@ const request = require('request');
 
 var app = express();
 
-var APP_VERSION = "0.0.10";
+var APP_VERSION = "0.0.11";
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -33,11 +33,16 @@ app.use(function (req, res, next) {
 
 app.get('/about', function (req, res) {
   var about = {
-    "about": "About Oracle JET Application - served from Docker Container with automatic reload facility",
+    "about": "About Oracle JET Application - served from Docker Container with automatic reload facility - version "+APP_VERSION,
     "PORT": process.env.PORT
     }
   res.json(about);
 })
+
+JET_WEBCOMPONENT_LOADER_MODULE= "JETWebComponentLoader"
+console.log("Loading JET_WEBCOMPONENT_LOADER_MODULE Module "+'./'+JET_WEBCOMPONENT_LOADER_MODULE+" powered from /js/jet-composites/jet-composites.json")
+var JET_WEBCOMPONENT_LOADER_MODULE = require('./'+JET_WEBCOMPONENT_LOADER_MODULE);
+JET_WEBCOMPONENT_LOADER_MODULE.init(app)
 
 if (process.env.CUSTOM_NODE_MODULE) {
   console.log("Loading Custom Module "+'./'+process.env.CUSTOM_NODE_MODULE)

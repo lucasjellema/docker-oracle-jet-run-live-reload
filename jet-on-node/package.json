@@ -13,6 +13,9 @@
     "morgan": "~1.9.0",
     "pug": "2.0.0-beta11",
     "request": "^2.85.0",
-    "serve-favicon": "~2.4.5"
+    "serve-favicon": "~2.4.5",
+    "@octokit/rest": "^15.2.4",
+    "@oracle/oraclejet": "~4.1.0",
+    "shelljs": "^0.8.2"
   }
 }
