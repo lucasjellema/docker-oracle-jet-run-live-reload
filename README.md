@@ -122,3 +122,5 @@ The basis for the actions taken by this module is the /js/jet-composites/jet-com
     }
 ]
 ```
+
+In order to have WebComponents live refreshed from a GitHub WebHook trigger, you should configure such a webhook in the GitHub Repo and have it refer to the endpoint host:port/github/push in your JET Application.
