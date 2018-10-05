@@ -37,7 +37,7 @@ Example:
 =========
 Running a random Oracle JET sample application (created with ojet CLI) - from GitHub repo https://github.com/vijayveluchamy/ojet-exp-manager
 
-docker run --name jet-app -p 3008:3000 -p 4515:4500  -e GITHUB_URL=https://github.com/vijayveluchamy/ojet-exp-manager -e APPLICATION_ROOT_DIRECTORY= -d lucasjellema/ojet-run-live-reload:0.1
+docker run --name jet-app -p 3008:3000 -p 4515:4500  -e GITHUB_URL=https://github.com/vijayveluchamy/ojet-exp-manager -e APPLICATION_ROOT_DIRECTORY= -d lucasjellema/ojet-run-live-reload:0.3
 
 And access the JET application at:
 http://192.168.188.112:3008/
@@ -82,7 +82,11 @@ JET WebComponents
 =================
 JET WebComponent (fka JET Composite Components) can be loaded from a live endpoint (instead of static resources included in the container from the GitHub repo for the JET application) or can be refreshed from a specific GITHUB repo on demand or through a GitHub WebHook trigger.
 
-The JETWebComponentLoader module takes care of all that. The basis for the actions taken by this module is the /js/jet-composites/jet-composites.json file in your JET Application. This file looks like this - specifying JET Web Components with their name (reflected in the directory name in your JET Application under /js/jet-composites/ ), the GIT HUB source repo (and a specific component path if it deviates from src/js/jet-composites/<name of web component>) and possibly the live endpoint (the URL where the JET Web Component should be retrieved from):
+The JETWebComponentLoader module takes care of all that. Note: it requires you to pass a GITHUB Authentication URL in the environment variable GITHUB_TOKEN:
+
+docker run --name jet-app -p 3008:3000 -p 4515:4500  -e GITHUB_URL=https://github.com/vijayveluchamy/ojet-exp-manager -e GITHUB_TOKEN=jsjhasghay3434 -e APPLICATION_ROOT_DIRECTORY= -d lucasjellema/ojet-run-live-reload:0.3
+
+The basis for the actions taken by this module is the /js/jet-composites/jet-composites.json file in your JET Application. This file looks like this - specifying JET Web Components with their name (reflected in the directory name in your JET Application under /js/jet-composites/ ), the GIT HUB source repo (and a specific component path if it deviates from src/js/jet-composites/<name of web component>) and possibly the live endpoint (the URL where the JET Web Component should be retrieved from):
 ```
 [
     {
