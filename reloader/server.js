@@ -3,8 +3,8 @@ or a GitHub WebHook trigger (see: https://technology.amis.nl/2018/03/20/handle-a
 When it receives such a request, it will perform a Git pull in the app sub directory (from where this application runs) 
 
 Note: because of URL rewriting, the request URL may not start directly with /reload  but instead have a certain url rewrite prefix
-We cater for this through the environment variable URL_PREFIX; if this variable is set, we will check the request URL against the concatenation of
-URL_PREFIX and RELOAD_PATH
+We cater for this through the environment variable RELOADER_URL_PREFIX; if this variable is set, we will check the request URL against the concatenation of
+RELOADER_URL_PREFIX and RELOAD_PATH
 
 
 TODO
@@ -16,10 +16,10 @@ TODO
 const RELOAD_PATH = '/reload'
 const GITHUB_WEBHOOK_PATH = '/github/push'
 var URL_PREFIX =''
-if (process.env.URL_PREFIX) {
-    URL_PREFIX = process.env.URL_PREFIX
+if (process.env.RELOADER_URL_PREFIX) {
+    URL_PREFIX = process.env.RELOADER_URL_PREFIX
 }    
-console.log(`URL_PREFIX =${URL_PREFIX}`)
+console.log(`RELOADER_URL_PREFIX =${URL_PREFIX}`)
  
 
 var http = require('http');

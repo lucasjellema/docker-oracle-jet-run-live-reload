@@ -5,19 +5,19 @@ Upon changes, a live reload of the application can be performed - either by expl
 
 To build the container image:
 ```
-docker build -t "ojet-run-live-reload:0.3" .
-docker tag ojet-run-live-reload:0.3 lucasjellema/ojet-run-live-reload:0.3
-docker push lucasjellema/ojet-run-live-reload:0.3
+docker build -t "ojet-run-live-reload:0.4" .
+docker tag ojet-run-live-reload:0.4 lucasjellema/ojet-run-live-reload:0.4
+docker push lucasjellema/ojet-run-live-reload:0.4
 ```
 
 Run with image in local registry:
 ```
-docker run --name jet-app -p 3006:3000 -p 4510:4500  -e GITHUB_URL=https://github.com/lucasjellema/webshop-portal-soaring-through-the-cloud-native-sequel -e APPLICATION_ROOT_DIRECTORY=  -e CUSTOM_NODE_MODULE=appcustom -d ojet-run-live-reload:0.3
+docker run --name jet-app -p 3006:3000 -p 4510:4500  -e GITHUB_URL=https://github.com/lucasjellema/webshop-portal-soaring-through-the-cloud-native-sequel -e APPLICATION_ROOT_DIRECTORY=  -e CUSTOM_NODE_MODULE=appcustom -d ojet-run-live-reload:0.4
 ```
 
 After pushing the image to Docker Hub, the image can be used to run a new container on any Docker environment
 ```
-docker run --name jet-app -p 3006:3000 -p 4510:4500  -e GITHUB_URL=https://github.com/lucasjellema/webshop-portal-soaring-through-the-cloud-native-sequel -e APPLICATION_ROOT_DIRECTORY= -d lucasjellema/ojet-run-live-reload:0.3
+docker run --name jet-app -p 3006:3000 -p 4510:4500  -e GITHUB_URL=https://github.com/lucasjellema/webshop-portal-soaring-through-the-cloud-native-sequel -e APPLICATION_ROOT_DIRECTORY= -d -e JET_APP_URL_PREFIX= RELOADER_URL_PREFIX= lucasjellema/ojet-run-live-reload:0.4
 ```
 
 docker logs jet-app --follow
@@ -79,7 +79,7 @@ exports.init = function (app) {
 Note: at this point there is no mechanism to influence the package.json of the Node application.
 
 ## URL Rewriting
-Because of URL rewriting (or failure thereof), the request URL may be prefixed with path segment(s) that are not expected. The container caters for this through the environment variable URL_PREFIX; if this variable is set, its value is 'substracted' from the request URL in order to determine the required action.
+Because of URL rewriting (or failure thereof), the request URL may be prefixed with path segment(s) that are not expected. The container caters for this through the environment variables RELOADER_URL_PREFIX and JET_APP_URL_PREFIX; if thes variable are set, their value is 'substracted' from the request URL in order to determine the required action.
 
 
 ## JET WebComponents

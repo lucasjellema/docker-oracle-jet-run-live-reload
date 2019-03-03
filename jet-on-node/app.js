@@ -21,17 +21,29 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+/*Note: because of URL rewriting, the request URL may not start directly with /reload  but instead have a certain url rewrite prefix
+We cater for this through the environment variable JET_APP_URL_PREFIX; if this variable is set, we will check the request URL against the concatenation of
+JET_APP_URL_PREFIX and the application paths
+*/
+var URL_PREFIX =''
+if (process.env.JET_APP_URL_PREFIX) {
+    URL_PREFIX = process.env.JET_APP_URL_PREFIX
+}    
+console.log(`JET_APP_URL_PREFIX =${URL_PREFIX}`)
+
 
 app.use(express.static(path.join(__dirname, 'public')));
-
-
+if (URL_PREFIX) {
+app.use(URL_PREFIX, express.static(path.join(__dirname, 'public')));
+console.log(`Set epxress static for prefix URL path ${URL_PREFIX}` )
+}
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
-app.get('/about', function (req, res) {
+app.get(URL_PREFIX+'/about', function (req, res) {
   var about = {
     "about": "About Oracle JET Application - served from Docker Container with automatic reload facility - version "+APP_VERSION,
     "PORT": process.env.PORT
