@@ -2,6 +2,11 @@
 or a GitHub WebHook trigger (see: https://technology.amis.nl/2018/03/20/handle-a-github-push-event-from-a-web-hook-trigger-in-a-node-application/)
 When it receives such a request, it will perform a Git pull in the app sub directory (from where this application runs) 
 
+Note: because of URL rewriting, the request URL may not start directly with /reload  but instead have a certain url rewrite prefix
+We cater for this through the environment variable URL_PREFIX; if this variable is set, we will check the request URL against the concatenation of
+URL_PREFIX and RELOAD_PATH
+
+
 TODO
 - add the option to schedule an automatic periodic git pull
 
@@ -10,18 +15,24 @@ TODO
 
 const RELOAD_PATH = '/reload'
 const GITHUB_WEBHOOK_PATH = '/github/push'
+var URL_PREFIX =''
+if (process.env.URL_PREFIX) {
+    URL_PREFIX = process.env.URL_PREFIX
+}    
+console.log(`URL_PREFIX =${URL_PREFIX}`)
+ 
 
 var http = require('http');
 var server = http.createServer(function (request, response) {
     console.log(`method ${request.method} and url ${request.url}`)
-    if (request.method === 'GET' && request.url === RELOAD_PATH) {
+    if (request.method === 'GET' && request.url === URL_PREFIX+RELOAD_PATH) {
         console.log(`reload request starting at ${new Date().toISOString()}...`);
         refreshAppFromGit();
         response.write(`RELOADED!!${new Date().toISOString()}`);
         response.end();
         console.log('reload request handled...');
     }
-    else if (request.method === 'POST' && request.url === GITHUB_WEBHOOK_PATH) {
+    else if (request.method === 'POST' && request.url === URL_PREFIX+GITHUB_WEBHOOK_PATH) {
         let body = [];
         request.on('data', (chunk) => {
             body.push(chunk);

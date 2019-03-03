@@ -4,21 +4,21 @@ This repository defines a Docker container that takes a GitHub URL and builds an
 Upon changes, a live reload of the application can be performed - either by explicitly invoking the reload endpoint or by configuring a GitHub WebHook.
 
 To build the container image:
-
+```
 docker build -t "ojet-run-live-reload:0.3" .
-
 docker tag ojet-run-live-reload:0.3 lucasjellema/ojet-run-live-reload:0.3
 docker push lucasjellema/ojet-run-live-reload:0.3
+```
 
 Run with image in local registry:
-
+```
 docker run --name jet-app -p 3006:3000 -p 4510:4500  -e GITHUB_URL=https://github.com/lucasjellema/webshop-portal-soaring-through-the-cloud-native-sequel -e APPLICATION_ROOT_DIRECTORY=  -e CUSTOM_NODE_MODULE=appcustom -d ojet-run-live-reload:0.3
+```
 
-
-After pushing the image to Docker Hub
-
+After pushing the image to Docker Hub, the image can be used to run a new container on any Docker environment
+```
 docker run --name jet-app -p 3006:3000 -p 4510:4500  -e GITHUB_URL=https://github.com/lucasjellema/webshop-portal-soaring-through-the-cloud-native-sequel -e APPLICATION_ROOT_DIRECTORY= -d lucasjellema/ojet-run-live-reload:0.3
-
+```
 
 docker logs jet-app --follow
 
@@ -29,15 +29,16 @@ http://192.168.188.112:4510/reload
 
 
 To peek inside the container:
-
+```
 docker exec -it jet-app /bin/bash
+```
 
-
-Example:
-=========
+### Example:
 Running a random Oracle JET sample application (created with ojet CLI) - from GitHub repo https://github.com/vijayveluchamy/ojet-exp-manager
 
+```
 docker run --name jet-app -p 3008:3000 -p 4515:4500  -e GITHUB_URL=https://github.com/vijayveluchamy/ojet-exp-manager -e APPLICATION_ROOT_DIRECTORY= -d lucasjellema/ojet-run-live-reload:0.3
+```
 
 And access the JET application at:
 http://192.168.188.112:3008/
@@ -49,12 +50,12 @@ Image lucasjellema/ojet-run-live-reload:0.1 was created using Oracle JET 5.2.0. 
 
 https://github.com/gregja/ojetdiscovery
 
+```
 docker run --name jet-app -p 3008:3000 -p 4515:4500  -e GITHUB_URL=https://github.com/gregja/ojetdiscovery -e APPLICATION_ROOT_DIRECTORY= -d lucasjellema/ojet-run-live-reload:0.3
+```
 
 
-
-Custom Node Module
-==================
+## Custom Node Module
 This container allows JET applications to influence the server side action of the Node application that serves the JET resources.
 
 Any files in the src/jet-on-node directory in the JET application are copied to /tmp/jet-on-node - where the app module lives that handles resource requests.
@@ -77,9 +78,11 @@ exports.init = function (app) {
 
 Note: at this point there is no mechanism to influence the package.json of the Node application.
 
+## URL Rewriting
+Because of URL rewriting (or failure thereof), the request URL may be prefixed with path segment(s) that are not expected. The container caters for this through the environment variable URL_PREFIX; if this variable is set, its value is 'substracted' from the request URL in order to determine the required action.
 
-JET WebComponents
-=================
+
+## JET WebComponents
 JET WebComponent (fka JET Composite Components) can be loaded from a live endpoint (instead of static resources included in the container from the GitHub repo for the JET application) or can be refreshed from a specific GITHUB repo on demand or through a GitHub WebHook trigger.
 
 The JETWebComponentLoader module takes care of all that. Note: it requires you to pass a GITHUB Authentication URL in the environment variable GITHUB_TOKEN:
